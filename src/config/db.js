@@ -2,6 +2,7 @@ import { MongoClient } from "mongodb";
 import "dotenv/config";
 
 const client = new MongoClient(process.env.DB_URI);
+/** @type {import("mongodb").Db} */
 let db;
 
 export const connectDB = async () => {
