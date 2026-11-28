@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 import {
   createServiceInDB,
   deleteServiceFormDB,
+  detailServiceFromDB,
   getAllServicesFromDB,
   toggleUpdateServiceinDB,
   updateServiceInDB,
@@ -9,8 +10,8 @@ import {
 
 export const getServices = async (req, res) => {
   try {
-    const { vendorId } = req.query;
-    const services = await getAllServicesFromDB(vendorId);
+    const { vendorId, isActive } = req.query;
+    const services = await getAllServicesFromDB(vendorId, isActive);
     res.status(200).json({ success: true, data: services });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -26,6 +27,20 @@ export const createService = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const detailService = async (req, res) => {
+  const {id} = req.params
+  const service = await detailServiceFromDB(id)
+  if (!service) {
+      return res.status(404).json({ success: false, message: "Service not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: service,
+    });
+}
 
 
 export const updatedService = async (req, res) => {
